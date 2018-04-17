@@ -29,7 +29,6 @@ static int traverse_polygon(int, int, int, int);
 static int inside_polygon(trap_t *t)
 {
   int rseg = t->rseg;
-
   if (t->state == ST_INVALID)
     return 0;
 
@@ -58,9 +57,7 @@ static int new_chain_element()
 }
 
 
-static double get_angle(point_t *vp0,
-     point_t *vpnext,
-     point_t *vp1)
+static double get_angle(point_t *vp0,point_t *vpnext,point_t *vp1)
 {
   point_t v0, v1;
 
@@ -79,10 +76,7 @@ static double get_angle(point_t *vp0,
 
 /* (v0, v1) is the new diagonal to be added to the polygon. Find which */
 /* chain to use and return the positions of v0 and v1 in p and q */
-static int get_vertex_positions(int v0,
-     int v1,
-     int *ip,
-     int *iq)
+static int get_vertex_positions(int v0,int v1,int *ip,int *iq)
 {
   vertexchain_t *vp0, *vp1;
   register int i;
@@ -136,9 +130,7 @@ static int get_vertex_positions(int v0,
  * the current monotone polygon mcur. Split the current polygon into
  * two polygons using the diagonal (v0, v1)
  */
-static int make_new_monotone_poly(int mcur,
-     int v0,
-     int v1)
+static int make_new_monotone_poly(int mcur,int v0,int v1)
 {
   int p, q, ip, iq;
   int mnew = newmon();

@@ -1,4 +1,4 @@
-
+/*
 #include "triangulate.h"
 #include <cmath>
 #include <ctime>
@@ -15,7 +15,7 @@ static int permute[SEGSIZE];
 
 /* Generate a random permutation of the segments 1..n */
 
-int generate_random_ordering(int n)
+/*int generate_random_ordering(int n)
 {
   register int i;
   int m, st[SEGSIZE], *p;
@@ -40,7 +40,7 @@ int generate_random_ordering(int n)
 
 /* Return the next segment in the generated random ordering of all the */
 /* segments in S */
-
+/*
 int choose_segment()
 {
   int i;
@@ -72,3 +72,4 @@ int math_N(int n, int h)
 
   return (int) ceil((double) 1.0*n/v);
 }
+*/

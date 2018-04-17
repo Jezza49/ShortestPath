@@ -9,9 +9,7 @@
 #include "tri.cpp"
 #include "triangulate.h"
 #include "monotone.cpp"
-#include "misc.cpp"
 #include "construct.cpp"
-//#include "interface.h"
 
 typedef struct _point
 {
@@ -26,8 +24,6 @@ typedef std::vector<int> path;
 typedef std::pair<int, int> diagnal;
 
 points polygon_points;
-const char *usage = "Usage: shortest_path_in_polygon.exe [room_map_file_path] [path_file_path] [output_format]";
-
 inline double dist(const point &p, const point &q);
 path simple_stupid_funnel(const std::vector<diagnal> &d_list, const point &start, const point &end);
 inline int sign(double v);
@@ -41,11 +37,11 @@ bool to_left(const point &p, const point &q, const point &k);
 
 int main(int argc, char *argv[])
 {
-	if (argc != 3)
+	/*if (argc != 3)
 	{
 		std::cout << usage << std::endl;
 		return -1;
-	}
+	}*/
 
 	std::string line;
 	std::ifstream input(argv[1], std::ifstream::in);
@@ -83,11 +79,6 @@ int main(int argc, char *argv[])
 	std::ofstream output(argv[2], std::ofstream::out);
 	int start_tri = locate_point(triangles, triangles_count, start);
 	int end_tri = locate_point(triangles, triangles_count, end);
-	bool distance = false;
-	/*if (strcmp(argv[3], "path") == 0)
-		distance = false;
-	else if (strcmp(argv[3], "distance") == 0)
-		distance = true;*/
 	if (start_tri == end_tri)
 	{
 		output << dist(start, end) << std::endl;
@@ -113,14 +104,6 @@ int main(int argc, char *argv[])
 			else
 				total_dist += dist(start, end);
 			output << (total_dist) << std::endl;
-
-		/*else
-		{
-			output << "s" << std::endl;
-			for (int i = 0; i < shortest_path.size(); i++)
-				output << shortest_path[i] << std::endl;
-			output << "e" << std::endl;
-		}*/
 	}
 
 	delete[] vertices;
@@ -147,9 +130,6 @@ path simple_stupid_funnel(const std::vector<diagnal> &d_list, const point &start
 	bool add_left = false;
 	for (int i = 1; i <= d_list.size(); i++)
 	{
-#ifdef _DEBUG
-		printf("[%02d] ", i);
-#endif
 		vect lv, rv, nv;
 		lv = vect(polygon_points[left].x - apex.x, polygon_points[left].y - apex.y);
 		rv = vect(polygon_points[right].x - apex.x, polygon_points[right].y - apex.y);
@@ -201,14 +181,6 @@ path simple_stupid_funnel(const std::vector<diagnal> &d_list, const point &start
 			}
 			nv = vect(polygon_points[new_p].x - apex.x, polygon_points[new_p].y - apex.y);
 		}
-#ifdef _DEBUG
-		if (apex_id == -1)
-			std::cout << "Funel: [Apex: start, ";
-		else
-			std::cout << "Funel: [Apex:" << apex_id << ", ";
-		std::cout << "Left:" << left << ", Right:" << right << "]" << std::endl;
-#endif
-
 		bool cond1 = sign(cross_product(lv, nv)) == sign(cross_product(lv, rv));
 		bool cond2 = sign(cross_product(rv, nv)) == sign(cross_product(rv, lv));
 		if (add_left || last_end)
@@ -217,21 +189,11 @@ path simple_stupid_funnel(const std::vector<diagnal> &d_list, const point &start
 			{
 				if (cond2)
 				{
-#ifdef _DEBUG
-					std::cout << "     Left:" << left << " contracts to ";
-					if (new_p == -1)
-						std::cout << "end" << std::endl;
-					else
-						std::cout << new_p << std::endl;
-#endif
 					left = new_p;
 					left_id = i;
 				}
 				else
 				{
-#ifdef _DEBUG
-					std::cout << "     Add " << right << " to shortes path (New apex)" << std::endl;
-#endif
 					shortest_path.push_back(right);
 					apex = polygon_points[right];
 					apex_id = right;
@@ -242,9 +204,6 @@ path simple_stupid_funnel(const std::vector<diagnal> &d_list, const point &start
 							left = d_list[i].first;
 							right = d_list[i].second;
 							left_id = right_id = i;
-#ifdef _DEBUG
-							std::cout << "     Update Left:" << left << " Right:" << right << std::endl;
-#endif
 							break;
 						}
 					}
@@ -259,21 +218,11 @@ path simple_stupid_funnel(const std::vector<diagnal> &d_list, const point &start
 			{
 				if (cond1)
 				{
-#ifdef _DEBUG
-					std::cout << "     Right:" << right << " contracts to ";
-					if (new_p == -1)
-						std::cout << "end" << std::endl;
-					else
-						std::cout << new_p << std::endl;
-#endif
 					right = new_p;
 					right_id = i;
 				}
 				else
 				{
-#ifdef _DEBUG
-					std::cout << "     Add " << left << " to shortes path (New apex)" << std::endl;
-#endif
 					shortest_path.push_back(left);
 					apex = polygon_points[left];
 					apex_id = left;
@@ -284,9 +233,6 @@ path simple_stupid_funnel(const std::vector<diagnal> &d_list, const point &start
 							left = d_list[i].first;
 							right = d_list[i].second;
 							left_id = right_id = i;
-#ifdef _DEBUG
-							std::cout << "     Update Left:" << left << " Right:" << right << std::endl;
-#endif
 							break;
 						}
 					}
@@ -369,8 +315,7 @@ std::vector<int> dfs(const int triangles[][3], int triangles_count, int start_tr
 	return triangles_list;
 }
 
-bool neighbor_triangles(const int triangles[][3], int triangles_count,
-	int tri1, int tri2)
+bool neighbor_triangles(const int triangles[][3], int triangles_count,int tri1, int tri2)
 {
 	if (tri1 != tri2)
 	{

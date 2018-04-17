@@ -66,7 +66,6 @@ typedef struct {
 #define T_Y     2
 #define T_SINK  3
 
-
 #define SEGSIZE 100000
         /* max# of segments. Determines how */
 				/* many points can be specified as */
@@ -122,7 +121,7 @@ typedef struct {
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 
 #define CROSS(v0, v1, v2) (((v1).x - (v0).x)*((v2).y - (v0).y) - \
-			   ((v1).y - (v0).y)*((v2).x - (v0).x))
+((v1).y - (v0).y)*((v2).x - (v0).x))
 
 #define DOT(v0, v1) ((v0).x * (v1).x + (v0).y * (v1).y)
 
