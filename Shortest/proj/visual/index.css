@@ -1,0 +1,34 @@
+body {
+  margin: 0;
+}
+#result {
+  position: absolute;
+  top:0;
+  left:0;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border:1px solid black;
+}
+#dist {
+  position: absolute;
+  font-size: 2em;
+  font-family: sans-serif;
+  padding: 1em;
+}
+.buttons {
+  position: absolute;
+  top: 40px;
+  z-index: +200;
+}
+#exchange {
+  width: 70%;
+  left: 15%;
+  position: absolute;
+  z-index: +100;
+  display: none;
+}
+#exchange textarea {
+  width: 100%;
+  margin-bottom: 20px;
+}
