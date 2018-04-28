@@ -42,12 +42,12 @@ int main(int argc, char *argv[])
 		std::cout << usage << std::endl;
 		return -1;
 	}*/
-
+	clock_t t;
+    int f;
+    t = clock();
 	std::string line;
 	std::ifstream input(argv[1], std::ifstream::in);
 	double sx, sy, ex, ey;
-	input >> sx >> sy >> ex >> ey;
-	point start(sx, sy), end(ex, ey);
 	int count;
 	input >> count;
 	for (int i = 0; i < count; i++)
@@ -56,7 +56,8 @@ int main(int argc, char *argv[])
 		input >> x >> y;
 		polygon_points.push_back(point(x, y));
 	}
-
+	input >> sx >> sy >> ex >> ey;
+	point start(sx, sy), end(ex, ey);
 	int vertices_count = polygon_points.size();
 	int triangles_count = polygon_points.size() - 2;
 
@@ -79,9 +80,15 @@ int main(int argc, char *argv[])
 	std::ofstream output(argv[2], std::ofstream::out);
 	int start_tri = locate_point(triangles, triangles_count, start);
 	int end_tri = locate_point(triangles, triangles_count, end);
+	if(start_tri==-1 || end_tri==-1)
+	{
+		std::cout<<"Points not in triangle";
+		return 0;
+	}
+
 	if (start_tri == end_tri)
 	{
-		output << dist(start, end) << std::endl;
+		std::cout << "Distance: " << dist(start, end) << std::endl;
 	}
 	else
 	{
@@ -89,6 +96,12 @@ int main(int argc, char *argv[])
 		std::vector<diagnal> d_list = diagnals_list(triangles, triangles_list);
 		path shortest_path = simple_stupid_funnel(d_list, start, end);
 		double total_dist = 0;
+
+			for (int i = 0; i < shortest_path.size(); i++)
+			{
+				std::cout << shortest_path[i] << std::endl;
+			}
+
 			for (int i = 0; i < shortest_path.size(); i++)
 			{
 				point last;
@@ -103,8 +116,13 @@ int main(int argc, char *argv[])
 				total_dist += dist(polygon_points[shortest_path[shortest_path.size() - 1]], end);
 			else
 				total_dist += dist(start, end);
-			output << (total_dist) << std::endl;
+			std::cout << "Distance: " << (total_dist) << std::endl;
 	}
+
+	t = clock() - t;
+
+  // printf ("It took me %d clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
+  output<<count<<" "<<t;
 
 	delete[] vertices;
 	delete[] triangles;
@@ -335,7 +353,7 @@ bool neighbor_triangles(const int triangles[][3], int triangles_count,int tri1, 
 
 int locate_point(const int triangles[][3], int triangles_count, const point &k)
 {
-	int i;
+	int i;int flag=0;
 	for (i = 0; i < triangles_count; i++)
 	{
 		point p = polygon_points[triangles[i][0]];
@@ -343,8 +361,9 @@ int locate_point(const int triangles[][3], int triangles_count, const point &k)
 		point r = polygon_points[triangles[i][2]];
 
 		if (in_triangle(p, q, r, k))
-			break;
+			{flag=1;break;}
 	}
+	if(flag==0){return -1;}
 	return i;
 }
 
